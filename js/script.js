@@ -2,18 +2,22 @@ const keys = document.querySelectorAll('.key, .black-key');
 
 // Função para tocar o som
 function playSound(note) {
-    const audio = new Audio(`sounds/${note}.mp3`);
+    // Substitui o # por 'sharp' apenas para o nome do arquivo
+    const audioFile = note.replace('#', 'sharp');
+    const audio = new Audio(`sounds/${audioFile}.mp3`);
     audio.play();
 }
 
 keys.forEach(key => {
-    key.addEventListener('click', (event) => {
+    key.addEventListener('mousedown', (event) => {
         // Previne a propagação do evento para teclas pretas
         if (key.classList.contains('black-key')) {
             event.stopPropagation();
         }
         const sound = key.getAttribute('data-sound');
         playSound(sound);
+        // Mostra a nota exatamente como está no data-sound (com #)
+        document.querySelector('.current-note').textContent = `Nota: ${sound}`;
     });
 });
 
@@ -43,6 +47,8 @@ document.addEventListener('keydown', (e) => {
     if (note) {
         playSound(note);
         addActiveClass(note);
+        // Mostra a nota exatamente como está no keyMap (com #)
+        document.querySelector('.current-note').textContent = `Nota: ${note}`;
     }
 });
 
